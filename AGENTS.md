@@ -1,17 +1,11 @@
 # DERO – Globale AGENTS.md
 
-Diese Datei definiert meine allgemeinen Arbeits- und Qualitätsregeln für Codex. Explizite Anforderungen und projektspezifische Regeln gehen vor.
+Diese Datei definiert meine allgemeinen Arbeits- und Qualitätsregeln für Codex. Explizite Anforderungen und nähere projektspezifische Regeln gehen vor. Keine Regel als Vorwand verwenden, eine klare Aufgabe unnötig aufzublähen oder nicht auszuführen.
 
-## Geltungsbereich
+## Session-Bestätigung
 
-Priorität bei Konflikten:
-
-1. Aktueller Auftrag
-2. Nächstgelegene projektspezifische `AGENTS.md`
-3. Bestehende Contracts, aktuelle Dokumentation und etablierte Code-Patterns
-4. Diese globale Datei
-
-Projektspezifische Regeln dürfen diese Defaults bewusst konkretisieren oder überschreiben. Keine Regel als Vorwand verwenden, eine klare Aufgabe unnötig aufzublähen oder nicht auszuführen.
+Die erste sichtbare Antwort jeder neuen interaktiven Codex-Session beginnt mit `[DERO Config aktiv]`, sofern kein zwingendes Ausgabeformat oder maschinenlesbarer Output dagegensteht.
+Der Marker erscheint nur einmal pro Session und bestätigt, dass die aktive Instruction-Kette berücksichtigt wurde.
 
 ## Harte Grenzen
 
@@ -53,15 +47,12 @@ Kleine, klar abgegrenzte Aufgaben direkt bearbeiten.
 
 Vor größeren Änderungen einen kurzen Plan mit Akzeptanzkriterien erstellen, wenn mehrere Module oder Systemgrenzen betroffen sind, Datenmodelle oder öffentliche Contracts geändert werden, relevante Trade-offs bestehen oder mehrere eigenständige Schritte nötig sind.
 
-Nach ausreichender Klärung umsetzen, statt weiter zu planen.
-
-Rückfragen nur stellen, wenn eine offene Entscheidung Produktverhalten, Datenkompatibilität, Sicherheit oder Scope wesentlich verändert. Andernfalls eine vernünftige Annahme benennen und fortfahren.
+Nach ausreichender Klärung umsetzen, statt weiter zu planen. Bei eindeutigem Ziel gewöhnliche Implementierungsdetails selbstständig entscheiden. Nur nachfragen, wenn eine fehlende fachliche Entscheidung Produktverhalten, Datenkompatibilität, Sicherheit oder Scope wesentlich verändert oder nicht sicher reversibel ist.
 
 ## Einfachheit, Wiederverwendung und Architektur
 
 Bevorzuge die kleinste vollständige und saubere Lösung.
 
-- Nicht over-engineeren.
 - Keine Abstraktionen für hypothetische Anforderungen einführen.
 - Keine parallelen Lösungen für bereits gelöste Probleme schaffen.
 - Unnötige Wrapper, Adapter, Factory-Schichten und Indirektion vermeiden.
@@ -70,7 +61,18 @@ Bevorzuge die kleinste vollständige und saubere Lösung.
 - Keine Debug-Reste, temporären Hilfsskripte oder Logs zurücklassen.
 - Veralteten Code nur entfernen, wenn dies sicher im Scope liegt.
 
-Wenn 200 Zeilen geschrieben wurden und dasselbe Verhalten klar und vernünftig in etwa 50 Zeilen umgesetzt werden könnte, die Lösung vereinfachen und neu schreiben. Die Zeilenzahl ist nur ein Warnsignal für unnötige Komplexität.
+### Strukturelle Vereinfachung
+
+Vor lokalen Ergänzungen prüfen, ob sich die Aufgabe durch eine bessere Nutzung der bestehenden Architektur grundlegend vereinfachen lässt.
+
+- Lösungen bevorzugen, durch die Branches, Zustände, Sonderfälle, Helper, Modi oder Schichten vollständig entfallen.
+- Komplexität löschen statt sie nur auf mehrere Dateien oder Abstraktionen zu verteilen.
+- Verstreute Sonderfall-Conditionals als Designsignal behandeln und Entscheidungen möglichst an der fachlich zuständigen oder kanonischen Grenze bündeln.
+- Keine State Machine, Policy-Klasse oder andere Abstraktion allein zur formalen Sauberkeit einführen. Eine Abstraktion ist nur sinnvoll, wenn sie konkrete wiederkehrende Komplexität entfernt oder eine wichtige Grenze klarer macht.
+
+Wenn die Implementierung im Verhältnis zum Problem deutlich komplexer oder umfangreicher wirkt oder eine Datei erstmals über 1000 Zeilen wächst, vor Abschluss prüfen, ob Zustände, Branches, Abstraktionen, Sonderfälle oder klar trennbare Zuständigkeiten entfallen können.
+
+Die Zeilenzahl ist nur ein Warnsignal. Keinen fachlich unmotivierten Split oder eine Erweiterung des Scopes erzwingen. Bleibt eine neu über 1000 Zeilen gewachsene Datei bewusst zusammen, den strukturellen Grund im Abschlussbericht kurz nennen.
 
 Vor neuen Komponenten, Utilities, Hooks, Services, Datenstrukturen, CSS-Lösungen oder Validierungen zuerst nach einem bestehenden Äquivalent suchen. Wiederverwendung nicht erzwingen, wenn eine kleine lokale Lösung dadurch deutlich komplizierter wird.
 
@@ -80,7 +82,6 @@ Bestehende Grenzen respektieren:
 - Versteckte Kopplungen vermeiden.
 - Eine kanonische Source of Truth gegenüber synchronisierten Doppelzuständen bevorzugen.
 - Öffentliche Contracts erhalten, sofern ihre Änderung nicht Teil der Aufgabe ist.
-- Neue Abstraktionen erst bei einem konkreten wiederkehrenden Problem einführen.
 
 ## Abhängigkeiten
 
@@ -118,6 +119,14 @@ Externe, importierte, persistierte und nutzergesteuerte Daten an Systemgrenzen a
 - Fachliche Defaults nur verwenden, wenn sie definiert oder sicher ableitbar sind.
 - Keine spekulative Security-Infrastruktur außerhalb des Auftrags einführen.
 
+### Typ-, Zustands- und Ablaufgrenzen
+
+- In typisierten Projekten externe Daten an der Systemgrenze als `unknown` behandeln und dort validieren oder eingrenzen. `any`, unnötige Casts, übermäßige Optionalität und stille Fallbacks nicht verwenden, um unklare Invarianten zu verdecken.
+- Bekannte einfache Datenformen nicht hinter unnötig generischen Mechanismen verstecken.
+- Fachliche Entscheidungen in der kanonischen Schicht halten und vorhandene Contracts oder Utilities wiederverwenden.
+- Unabhängige Arbeit parallelisieren, wenn keine Reihenfolge erforderlich ist und das Fehlerverhalten verständlich bleibt.
+- Zusammengehörige Zustandsänderungen möglichst atomar ausführen. Wo das technisch nicht möglich ist, eine sichere Reihenfolge sowie nachvollziehbare Wiederaufnahme oder Kompensation vorsehen.
+
 ## Dokumentation und Kommentare
 
 Dokumentation enthält dauerhaft relevantes Wissen: Setup, Betrieb, Architektur, Contracts, wichtige Designentscheidungen, Security-Anforderungen, Wartungsabläufe und bekannte Grenzen.
@@ -139,16 +148,23 @@ Kommentare und Docstrings erklären Zweck, Invarianten, Trade-offs oder nicht of
 
 ## Tests und Verifikation
 
-Verifikation an Risiko und Repository-Vorgaben ausrichten:
+Tests sind ausführbare Verhaltensverträge, kein Selbstzweck und kein Mittel zur künstlichen Erhöhung der Coverage.
 
-1. Gezielte Tests für das geänderte Verhalten
-2. Typ- oder statische Prüfungen
-3. Lint- und Format-Prüfungen
-4. Relevante breitere Testsuite
-5. Build, wenn Kompilierung, Bundling oder Packaging betroffen sein können
-6. Finaler Diff-Check auf unbeabsichtigte, generierte und reine Whitespace-Änderungen
+Bei neuem oder geändertem Verhalten mit relevantem fachlichem oder technischem Risiko das erwartete Verhalten vor der Implementierung festlegen und idealerweise zuerst einen kleinen fokussierten Test schreiben, der aus dem erwarteten Grund fehlschlägt.
 
-Während der Entwicklung gezielte Checks verwenden. Teure vollständige Gates nicht nach jeder kleinen Änderung erneut starten; vor Abschluss den angemessenen vollständigen Gate ausführen.
+Test-first besonders bevorzugen bei:
+
+- geschäftskritischer, sicherheits- oder datenrelevanter Fach- und Berechtigungslogik,
+- öffentlichen Contracts, Datenformaten, Zustandsübergängen, Parsern, Validierung und komplexen Interaktionen,
+- reproduzierbaren Bugfixes und Regressionen.
+
+Assertions aus dem gewünschten Verhalten, Contract oder reproduzierten Fehler ableiten, nicht nachträglich aus der bereits geschriebenen Implementierung.
+
+Keine Tests ergänzen, die lediglich das Typsystem, triviale Getter, Framework-Verhalten oder Implementierungsdetails wiederholen. Für Dokumentation, reine Konfiguration, visuelle Versuche, einfache Verdrahtung oder explorative Prototypen ist Test-first nicht zwingend; dort die leichteste aussagekräftige Verifikation verwenden.
+
+Fehlt für eine kleine Änderung eine Testinfrastruktur, nicht allein dafür ein unverhältnismäßig großes Testsystem einführen.
+
+Verifikation risikobasiert staffeln: zuerst gezielte Tests für das geänderte Verhalten, danach Typ- oder statische Prüfungen und Lint, anschließend die relevante breitere Testsuite und bei betroffener Kompilierung, Bundling oder Packaging den Build, zuletzt den finalen Diff-Check. Während der Entwicklung gezielt prüfen; teure vollständige Gates erst vor Abschluss ausführen.
 
 Für sichtbare UI-Änderungen mindestens die leichteste sinnvolle visuelle oder interaktive Prüfung durchführen, sofern möglich. Browser-Automation, Screenshots oder E2E-Tests einsetzen, wenn Nutzer oder Repository dies verlangen, End-to-End-Verhalten betroffen ist oder das Ergebnis anders nicht zuverlässig geprüft werden kann.
 
@@ -176,16 +192,14 @@ Wenn ja, vor Abschluss vereinfachen. Selbst verursachte Probleme innerhalb des S
 
 Bei Review-, Analyse-, Diagnose- oder Planungsaufgaben untersuchen und berichten, aber das Repository nicht verändern, sofern keine Änderung angefordert wurde.
 
-Bei Implementierungs-, Fix- oder Refactoring-Aufgaben die angeforderten Änderungen innerhalb des Scopes vollständig umsetzen, normale nicht-destruktive Verifikation durchführen und gewöhnliche Details selbstständig entscheiden, wenn das Ziel eindeutig ist.
+Bei Implementierungs-, Fix- oder Refactoring-Aufgaben die angeforderten Änderungen innerhalb des Scopes vollständig umsetzen und normale nicht-destruktive Verifikation durchführen.
 
 Eine fokussierte Aufgabe nicht in einen repositoryweiten Umbau verwandeln.
 
 Für Git gilt:
 
-- Unbeteiligte Nutzeränderungen erhalten.
-- Nur zum Auftrag gehörende Dateien stagen.
-- Commits fokussiert halten und Conventional Commits verwenden.
-- Unzusammenhängende Änderungen nicht vermischen.
+- Keine Commits erstellen, sofern dies nicht ausdrücklich angefordert wird oder der projektspezifische Workflow Commits verlangt.
+- Falls committed wird, nur zum Auftrag gehörende Dateien stagen, unzusammenhängende Änderungen trennen und fokussierte Conventional Commits verwenden.
 - Nicht pushen, sofern dies nicht ausdrücklich autorisiert wurde.
 - Keine repositoryweiten Formatierungen oder Autofixes mit unnötigen Fremdänderungen ausführen.
 
