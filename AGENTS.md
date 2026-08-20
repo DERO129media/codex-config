@@ -1,22 +1,16 @@
 # DERO – Globale AGENTS.md
 
-Diese Datei definiert meine allgemeinen Arbeits- und Qualitätsregeln für Codex. Explizite Anforderungen und nähere projektspezifische Regeln gehen vor. Keine Regel als Vorwand verwenden, eine klare Aufgabe unnötig aufzublähen oder nicht auszuführen.
+Diese Datei definiert meine globalen Arbeits- und Qualitätsregeln für Codex. Explizite Anforderungen und näher liegende projektspezifische `AGENTS.md`-Dateien gehen vor.
+
+Die Regeln sind Entscheidungsprinzipien, keine Pflicht-Checkliste. Keine zusätzliche Arbeit nur zur sichtbaren Regelbefolgung erzeugen und keine Regel als Vorwand verwenden, eine klare Aufgabe aufzublähen oder nicht umzusetzen.
 
 ## Session-Bestätigung
 
 Die erste sichtbare Antwort jeder neuen interaktiven Codex-Session beginnt mit `[DERO Config aktiv]`, sofern kein zwingendes Ausgabeformat oder maschinenlesbarer Output dagegensteht.
-Der Marker erscheint nur einmal pro Session und bestätigt, dass die aktive Instruction-Kette berücksichtigt wurde.
 
-## Harte Grenzen
+Der Marker erscheint nur einmal pro Session und dient als Smoke-Test, dass diese Konfiguration aktiv ist.
 
-- Fremde oder unbeteiligte Änderungen niemals verwerfen, überschreiben oder ungefragt einbeziehen.
-- Keine Secrets, Zugangsdaten oder sensiblen Daten exponieren, committen oder unnötig loggen.
-- Keine destruktiven oder extern wirksamen Aktionen ohne ausdrücklichen Auftrag ausführen, insbesondere kein Push, Deployment, Versand, Löschen produktiver Daten oder irreversible Migration.
-- Daten-, Berechtigungs- und Sicherheitsgrenzen nicht beiläufig verändern.
-- Fehlende fachliche Informationen nicht erfinden.
-- Keine Tests oder Verifikation behaupten, die nicht tatsächlich ausgeführt wurden.
-
-## Grundprinzipien
+## Prioritäten und harte Grenzen
 
 Optimiere in dieser Reihenfolge:
 
@@ -26,175 +20,162 @@ Optimiere in dieser Reihenfolge:
 4. Wartbarkeit
 5. Praktisch relevante Performance
 
-Sicherheit, Datenintegrität und der Erhalt fremder Änderungen sind harte Grenzen, keine nachgeordneten Optimierungsziele.
+Sicherheit, Datenintegrität und der Erhalt fremder Änderungen sind harte Grenzen.
 
-## Erst verstehen, dann ändern
+- Fremde oder unbeteiligte Änderungen niemals verwerfen, überschreiben oder ungefragt einbeziehen.
+- Keine Secrets, Zugangsdaten oder sensiblen Daten exponieren, committen oder unnötig loggen.
+- Keine destruktiven oder extern wirksamen Aktionen ohne ausdrücklichen Auftrag ausführen, insbesondere kein Push, Deployment, Versand, Löschen produktiver Daten oder irreversible Migration.
+- Daten-, Berechtigungs- und Sicherheitsgrenzen nicht beiläufig verändern.
+- Fehlende fachliche Informationen nicht erfinden.
+- Keine Tests, Prüfungen oder Ergebnisse behaupten, die nicht tatsächlich ausgeführt oder beobachtet wurden.
 
-Vor Änderungen:
+## Arbeitsweise
 
-- Relevante Implementierung, nächstgelegene `AGENTS.md` und aktuelle Dokumentation lesen.
-- Die tatsächliche Source of Truth bestimmen; nicht auf alte Pläne oder Vermutungen vertrauen.
-- Nach vorhandenen Komponenten, Utilities, Hooks, Services, Schemas, Konfigurationen und Patterns suchen.
-- Git-Status prüfen und unbeteiligte Worktree-Änderungen erhalten.
-- Bei strukturellen Änderungen zuerst Datenfluss, Zuständigkeiten und Modulgrenzen verstehen.
+### Erst verstehen, dann ändern
+
+- Relevante Implementierung, die nächstgelegene `AGENTS.md` und aktuelle Dokumentation lesen.
+- Die tatsächliche Source of Truth bestimmen; bei strukturellen Änderungen zusätzlich Datenfluss, Zuständigkeiten und Modulgrenzen verstehen.
+- Relevante Pfade, Symbole, Imports, Verwendungen und Aufrufer gezielt lokalisieren, bevor große Dateien oder Repository-Bereiche vollständig gelesen werden.
+- Vor neuen Lösungen nach vorhandenen Komponenten, Utilities, Services, Schemas, Konfigurationen und Patterns suchen.
+- Den Git-Status zu Beginn prüfen und unbeteiligte Worktree-Änderungen erhalten.
 - Generierte Dateien über ihre kanonische Quelle ändern, nicht manuell.
+- Bereits gelesene, unveränderte Dateien und bekannte Zustände nicht ohne konkrete offene Frage erneut laden oder prüfen.
 
 Keine neue Architektur schaffen, wenn bereits ein geeignetes Muster existiert.
 
-## Planung und Entscheidungen
+### Planung und Entscheidungen
 
 Kleine, klar abgegrenzte Aufgaben direkt bearbeiten.
 
-Vor größeren Änderungen einen kurzen Plan mit Akzeptanzkriterien erstellen, wenn mehrere Module oder Systemgrenzen betroffen sind, Datenmodelle oder öffentliche Contracts geändert werden, relevante Trade-offs bestehen oder mehrere eigenständige Schritte nötig sind.
+Einen kurzen Plan mit Akzeptanzkriterien erstellen, wenn mehrere Module oder Systemgrenzen betroffen sind, Datenmodelle oder öffentliche Contracts geändert werden, relevante Trade-offs bestehen oder mehrere eigenständige Schritte nötig sind.
 
-Nach ausreichender Klärung umsetzen, statt weiter zu planen. Bei eindeutigem Ziel gewöhnliche Implementierungsdetails selbstständig entscheiden. Nur nachfragen, wenn eine fehlende fachliche Entscheidung Produktverhalten, Datenkompatibilität, Sicherheit oder Scope wesentlich verändert oder nicht sicher reversibel ist.
+Nach ausreichender Klärung umsetzen, statt weiter zu planen. Gewöhnliche und sicher reversible Implementierungsdetails selbstständig entscheiden. Nur nachfragen, wenn eine fehlende fachliche Entscheidung Produktverhalten, Datenkompatibilität, Sicherheit oder Scope wesentlich verändert und nicht sicher reversibel ist.
 
-## Einfachheit, Wiederverwendung und Architektur
+### Kontext- und Tool-Effizienz
 
-Bevorzuge die kleinste vollständige und saubere Lösung.
+Korrektheit und ausreichende Verifikation gehen vor Tokenersparnis. Bereits bekannte Informationen nicht unnötig erneut in den Modellkontext laden.
 
-- Keine Abstraktionen für hypothetische Anforderungen einführen.
-- Keine parallelen Lösungen für bereits gelöste Probleme schaffen.
-- Unnötige Wrapper, Adapter, Factory-Schichten und Indirektion vermeiden.
-- Direkten, verständlichen Code cleverem Code vorziehen.
-- Keine beiläufigen Refactorings außerhalb des Auftrags durchführen.
-- Keine Debug-Reste, temporären Hilfsskripte oder Logs zurücklassen.
-- Veralteten Code nur entfernen, wenn dies sicher im Scope liegt.
+- Zusammengehörige Abfragen bündeln und Tool-Ausgaben standardmäßig kompakt halten; bei konkretem Diagnosebedarf gezielt erweitern.
+- Stabile Erkenntnisse innerhalb derselben Session weiterverwenden.
+- Nach größeren Arbeitsphasen einen knappen internen Stand aus relevanten Dateien, Entscheidungen, Verifikation und offenen Punkten beibehalten. Nach einer Context-Compaction darauf aufbauen, statt das Repository neu zu erkunden.
+- System-, Git-, Deployment-, Health- und Testabfragen nur wiederholen, wenn sich der relevante Zustand verändert haben kann oder ein finaler Nachweis nötig ist.
+- Bei Git zunächst `git diff --stat`, `git diff --name-only` oder gezielte Hunks verwenden.
+- Arbeit nur parallelisieren oder an Subagents geben, wenn die Aufgaben klar getrennt sind. Keine überlappende Repository-Erkundung oder doppelte Reads erzeugen.
 
-### Strukturelle Vereinfachung
+## Implementierungsdisziplin
 
-Vor lokalen Ergänzungen prüfen, ob sich die Aufgabe durch eine bessere Nutzung der bestehenden Architektur grundlegend vereinfachen lässt.
+Bevorzuge die kleinste vollständige und saubere Lösung, die zur bestehenden Architektur passt.
 
-- Lösungen bevorzugen, durch die Branches, Zustände, Sonderfälle, Helper, Modi oder Schichten vollständig entfallen.
-- Komplexität löschen statt sie nur auf mehrere Dateien oder Abstraktionen zu verteilen.
-- Verstreute Sonderfall-Conditionals als Designsignal behandeln und Entscheidungen möglichst an der fachlich zuständigen oder kanonischen Grenze bündeln.
-- Keine State Machine, Policy-Klasse oder andere Abstraktion allein zur formalen Sauberkeit einführen. Eine Abstraktion ist nur sinnvoll, wenn sie konkrete wiederkehrende Komplexität entfernt oder eine wichtige Grenze klarer macht.
+- Direkten, verständlichen Code cleverem oder unnötig generischem Code vorziehen.
+- Vor neuen Komponenten, Utilities, Services, Datenstrukturen, CSS-Lösungen oder Validierungen nach einem bestehenden Äquivalent suchen.
+- Wiederverwendung nicht erzwingen, wenn eine kleine lokale Lösung dadurch deutlich komplizierter wird.
+- Keine Abstraktionen für hypothetische Anforderungen, parallelen Lösungen oder beiläufigen Refactorings außerhalb des Auftrags einführen.
+- Keine neuen Modi, Konfigurationsschichten, Erweiterungspunkte oder Dependencies ohne konkreten Bedarf schaffen.
+- Keine Debug-Reste, temporären Hilfsskripte oder unnötigen Logs zurücklassen.
+- Veralteten Code nur entfernen, wenn dies sicher zum Scope gehört.
 
-Wenn die Implementierung im Verhältnis zum Problem deutlich komplexer oder umfangreicher wirkt oder eine Datei erstmals über 1000 Zeilen wächst, vor Abschluss prüfen, ob Zustände, Branches, Abstraktionen, Sonderfälle oder klar trennbare Zuständigkeiten entfallen können.
+Eine Abstraktion ist gerechtfertigt, wenn sie konkrete wiederkehrende Komplexität entfernt oder eine wichtige Systemgrenze klarer und sicherer macht. Formale Sauberkeit allein reicht nicht.
 
-Die Zeilenzahl ist nur ein Warnsignal. Keinen fachlich unmotivierten Split oder eine Erweiterung des Scopes erzwingen. Bleibt eine neu über 1000 Zeilen gewachsene Datei bewusst zusammen, den strukturellen Grund im Abschlussbericht kurz nennen.
+Bevorzuge Lösungen, durch die Branches, Zustände, Sonderfälle, Helper oder Schichten entfallen. Komplexität nicht lediglich auf mehrere Dateien oder Abstraktionen verteilen.
 
-Vor neuen Komponenten, Utilities, Hooks, Services, Datenstrukturen, CSS-Lösungen oder Validierungen zuerst nach einem bestehenden Äquivalent suchen. Wiederverwendung nicht erzwingen, wenn eine kleine lokale Lösung dadurch deutlich komplizierter wird.
+Wenn die Implementierung im Verhältnis zum Problem deutlich zu komplex oder umfangreich wird, innerhalb des bestehenden Scopes vereinfachen. Den Scope nicht allein erweitern, um die Architektur grundsätzlich zu verbessern.
 
 Bestehende Grenzen respektieren:
 
-- Fachlogik und Darstellung nicht vermischen, wenn das Projekt sie trennt.
-- Versteckte Kopplungen vermeiden.
+- Fachlogik und Darstellung trennen, wenn das Projekt dies vorsieht.
+- Fachliche Entscheidungen in der kanonischen Schicht halten.
 - Eine kanonische Source of Truth gegenüber synchronisierten Doppelzuständen bevorzugen.
 - Öffentliche Contracts erhalten, sofern ihre Änderung nicht Teil der Aufgabe ist.
+- Versteckte Kopplungen, implizite Seiteneffekte und unnötig generische Mechanismen vermeiden.
+- Zusammengehörige Zustandsänderungen möglichst atomar ausführen; andernfalls eine sichere Reihenfolge und nachvollziehbare Wiederaufnahme oder Kompensation vorsehen.
 
-## Abhängigkeiten
+### Abhängigkeiten
 
-Neue Produktionsabhängigkeiten sind dauerhafte Kosten. Vor dem Hinzufügen prüfen:
-
-1. Löst der vorhandene Stack das Problem?
-2. Ist eine kleine, sichere lokale Lösung sinnvoller?
-3. Reduziert die Dependency Komplexität, Wartungsaufwand oder Risiko?
-4. Welche Folgen hat sie für Bundle, Laufzeit, Lizenz, Updates und Sicherheitsfläche?
+Vor einer neuen Produktionsabhängigkeit prüfen, ob der vorhandene Stack oder eine kleine lokale Lösung genügt und ob die Dependency Komplexität, Wartungsaufwand oder Risiko tatsächlich reduziert. Bundle, Laufzeit, Lizenz, Updates und Sicherheitsfläche berücksichtigen.
 
 Keine Packages nur aus Bequemlichkeit und keine Framework-Wechsel ohne ausdrückliche Notwendigkeit.
 
-Kryptografie, Authentifizierung, Passwort-Handling, Signaturprüfung oder komplexe Protokollparser nicht selbst implementieren, wenn eine etablierte gepflegte Lösung verfügbar ist.
+Kryptografie, Authentifizierung, Passwort-Handling, Signaturprüfung oder komplexe Protokollparser nicht selbst implementieren, wenn eine etablierte und gepflegte Lösung verfügbar ist.
 
-## UI, Designsystem und Accessibility
-
-Das Design soll zentral steuerbar sein.
-
-- Vorhandene Tokens, Primitives und Komponenten verwenden.
-- Semantische Tokens gegenüber rohen visuellen Werten bevorzugen.
-- Farben, Typografie, Abstände, Radien und Schatten nicht willkürlich lokal duplizieren.
-- Wiederkehrende visuelle Muster bei Bedarf in die gemeinsame UI-Schicht überführen.
-- Der Code ist die Source of Truth für konkrete Designwerte; Dokumentation erklärt das System.
-- Für kleine Projekte kein unnötig komplexes Designsystem bauen.
-
-Bei Oberflächen semantisches HTML und vorhandene zugängliche Patterns verwenden. Tastaturbedienung und sichtbaren Fokus erhalten, Icon-only-Controls zugänglich benennen und Interaktionen nicht nur über Farbe, Hover oder Mausbedienung vermitteln.
-
-## Daten, Sicherheit und Fehler
+## Daten, Typen, Sicherheit und Fehler
 
 Externe, importierte, persistierte und nutzergesteuerte Daten an Systemgrenzen als nicht vertrauenswürdig behandeln.
 
 - Eingaben mit den vorhandenen Mechanismen validieren.
-- Relevante Fehler nicht stillschweigend verschlucken.
-- Ursache und Kontext diagnostizierbar halten.
+- In typisierten Projekten externe Daten an der Systemgrenze als `unknown` behandeln und dort eingrenzen.
+- `any`, unnötige Casts, übermäßige Optionalität und stille Fallbacks nicht verwenden, um unklare Invarianten zu verdecken.
+- Relevante Fehler nicht verschlucken; Ursache und fachlichen Kontext diagnostizierbar halten.
 - Fachliche Defaults nur verwenden, wenn sie definiert oder sicher ableitbar sind.
 - Keine spekulative Security-Infrastruktur außerhalb des Auftrags einführen.
 
-### Typ-, Zustands- und Ablaufgrenzen
+## UI, Designsystem und Accessibility
 
-- In typisierten Projekten externe Daten an der Systemgrenze als `unknown` behandeln und dort validieren oder eingrenzen. `any`, unnötige Casts, übermäßige Optionalität und stille Fallbacks nicht verwenden, um unklare Invarianten zu verdecken.
-- Bekannte einfache Datenformen nicht hinter unnötig generischen Mechanismen verstecken.
-- Fachliche Entscheidungen in der kanonischen Schicht halten und vorhandene Contracts oder Utilities wiederverwenden.
-- Unabhängige Arbeit parallelisieren, wenn keine Reihenfolge erforderlich ist und das Fehlerverhalten verständlich bleibt.
-- Zusammengehörige Zustandsänderungen möglichst atomar ausführen. Wo das technisch nicht möglich ist, eine sichere Reihenfolge sowie nachvollziehbare Wiederaufnahme oder Kompensation vorsehen.
+Bei Oberflächen:
+
+- Vorhandene Tokens, Primitives und Komponenten verwenden.
+- Semantische Tokens bevorzugen und Designwerte nicht willkürlich lokal duplizieren.
+- Wiederkehrende visuelle Muster nur bei tatsächlicher Wiederholung in die gemeinsame UI-Schicht überführen.
+- Den Code als Source of Truth für konkrete Designwerte behandeln; Dokumentation erklärt das System.
+- Für kleine Projekte kein unnötig komplexes Designsystem bauen.
+- Semantisches HTML und vorhandene zugängliche Patterns verwenden.
+- Tastaturbedienung und sichtbaren Fokus erhalten, Icon-only-Controls zugänglich benennen und Interaktionen nicht ausschließlich über Farbe, Hover oder Mausbedienung vermitteln.
 
 ## Dokumentation und Kommentare
 
-Dokumentation enthält dauerhaft relevantes Wissen: Setup, Betrieb, Architektur, Contracts, wichtige Designentscheidungen, Security-Anforderungen, Wartungsabläufe und bekannte Grenzen.
+Dokumentation enthält dauerhaft relevantes Wissen wie Setup, Betrieb, Architektur, Contracts, wichtige Entscheidungen, Security-Anforderungen, Wartungsabläufe und bekannte Grenzen.
 
-Nicht dokumentieren:
+- Jede Information soll eine eindeutige Source of Truth haben.
+- Dokumentation im selben Change aktualisieren, wenn eine festgehaltene Aussage falsch wird.
+- Keine offensichtlichen Implementierungsdetails, temporären Erkenntnisse, Sitzungsverläufe, erledigten Aufgaben oder mehrfach gepflegten Informationen dokumentieren.
+- Keine leeren oder zeremoniellen Dokumente anlegen; historische Pläne klar kennzeichnen.
+- Unbeteiligte Dokumentation nicht aus Vollständigkeitsgefühl anfassen.
 
-- offensichtliche Implementierungsdetails,
-- temporäre Debug-Erkenntnisse, Sitzungsverläufe oder erledigte Aufgaben,
-- Informationen, die Code oder Tests bereits eindeutig ausdrücken,
-- dieselbe Information in mehreren Dokumenten.
-
-Jede Information soll eine eindeutige Source of Truth haben. Dokumentation im selben Change aktualisieren, wenn eine festgehaltene Aussage durch die Änderung falsch wird.
-
-Typische Dateien nur bei Bedarf: `README.md`, projektspezifische `AGENTS.md`, `docs/ARCHITECTURE.md`, `docs/DESIGN.md` und `docs/decisions/`.
-
-Keine leeren oder zeremoniellen Dokumente anlegen. Historische Pläne klar kennzeichnen. Unbeteiligte Dokumentation nicht aus Vollständigkeitsgefühl anfassen.
-
-Kommentare und Docstrings erklären Zweck, Invarianten, Trade-offs oder nicht offensichtliche Gründe. Sie wiederholen nicht lediglich den Code. Veraltete Kommentare entfernen oder korrigieren. TODOs nur konkret, begründet und auffindbar hinterlassen.
+Kommentare und Docstrings erklären Zweck, Invarianten, Trade-offs oder nicht offensichtliche Gründe, nicht lediglich den Code. Veraltete Kommentare korrigieren oder entfernen. TODOs nur konkret, begründet und auffindbar hinterlassen.
 
 ## Tests und Verifikation
 
 Tests sind ausführbare Verhaltensverträge, kein Selbstzweck und kein Mittel zur künstlichen Erhöhung der Coverage.
 
-Bei neuem oder geändertem Verhalten mit relevantem fachlichem oder technischem Risiko das erwartete Verhalten vor der Implementierung festlegen und idealerweise zuerst einen kleinen fokussierten Test schreiben, der aus dem erwarteten Grund fehlschlägt.
+Bei geändertem Verhalten mit relevantem Risiko das erwartete Verhalten vor der Implementierung festlegen und möglichst zuerst einen kleinen fokussierten Test schreiben. Test-first besonders bei geschäftskritischer, sicherheits- oder datenrelevanter Logik, öffentlichen Contracts, Datenformaten, Zustandsübergängen, Parsern, Validierung sowie reproduzierbaren Bugfixes und Regressionen bevorzugen.
 
-Test-first besonders bevorzugen bei:
+Assertions aus dem gewünschten Verhalten, Contract oder reproduzierten Fehler ableiten. Keine Tests ergänzen, die nur das Typsystem, triviale Getter, Framework-Verhalten oder Implementierungsdetails wiederholen.
 
-- geschäftskritischer, sicherheits- oder datenrelevanter Fach- und Berechtigungslogik,
-- öffentlichen Contracts, Datenformaten, Zustandsübergängen, Parsern, Validierung und komplexen Interaktionen,
-- reproduzierbaren Bugfixes und Regressionen.
+Für Dokumentation, reine Konfiguration, visuelle Versuche, einfache Verdrahtung oder explorative Prototypen die leichteste aussagekräftige Verifikation verwenden. Für eine kleine Änderung nicht allein ein unverhältnismäßig großes Testsystem einführen.
 
-Assertions aus dem gewünschten Verhalten, Contract oder reproduzierten Fehler ableiten, nicht nachträglich aus der bereits geschriebenen Implementierung.
+Verifikation risikobasiert staffeln:
 
-Keine Tests ergänzen, die lediglich das Typsystem, triviale Getter, Framework-Verhalten oder Implementierungsdetails wiederholen. Für Dokumentation, reine Konfiguration, visuelle Versuche, einfache Verdrahtung oder explorative Prototypen ist Test-first nicht zwingend; dort die leichteste aussagekräftige Verifikation verwenden.
+1. Gezielte Tests für das geänderte Verhalten
+2. Bei Bedarf Typprüfung, statische Analyse und Lint
+3. Relevante breitere Testsuite
+4. Bei betroffener Kompilierung, Bundling oder Packaging der Build
+5. Finaler Diff-Check
 
-Fehlt für eine kleine Änderung eine Testinfrastruktur, nicht allein dafür ein unverhältnismäßig großes Testsystem einführen.
+Teure vollständige Verify-, Build- oder E2E-Gates erst bei stabilem Arbeitsstand und final vor Abschluss ausführen. Ein erfolgreiches Gate nicht wiederholen, wenn seitdem keine dafür relevanten Änderungen erfolgt sind.
 
-Verifikation risikobasiert staffeln: zuerst gezielte Tests für das geänderte Verhalten, danach Typ- oder statische Prüfungen und Lint, anschließend die relevante breitere Testsuite und bei betroffener Kompilierung, Bundling oder Packaging den Build, zuletzt den finalen Diff-Check. Während der Entwicklung gezielt prüfen; teure vollständige Gates erst vor Abschluss ausführen.
+Erfolgreiche Checks kompakt zusammenfassen. Bei Fehlschlägen zuerst die relevante Fehlerstelle mit begrenztem Kontext untersuchen. Eigene Fehler, bestehende Fehler und Umgebungsprobleme unterscheiden.
 
-Für sichtbare UI-Änderungen mindestens die leichteste sinnvolle visuelle oder interaktive Prüfung durchführen, sofern möglich. Browser-Automation, Screenshots oder E2E-Tests einsetzen, wenn Nutzer oder Repository dies verlangen, End-to-End-Verhalten betroffen ist oder das Ergebnis anders nicht zuverlässig geprüft werden kann.
+Für sichtbare UI-Änderungen mindestens die leichteste sinnvolle visuelle oder interaktive Prüfung durchführen. Zuerst den primär betroffenen Zustand und einen repräsentativen Breakpoint prüfen; weitere Zustände, Screenshots oder E2E-Läufe nur bei konkretem Risiko, Unsicherheit oder Auftrag ergänzen. Bereits beantwortete visuelle Fragen nicht erneut prüfen.
 
-Fehlschläge untersuchen und eigene Fehler, bestehende Fehler sowie Umgebungsprobleme unterscheiden.
+## Self-Review, Scope und Git
 
-## Self-Review
+Bei Review-, Analyse-, Diagnose- oder Planungsaufgaben untersuchen und berichten, aber das Repository nicht verändern, sofern keine Änderung angefordert wurde. Bei Implementierungs-, Fix- oder Refactoring-Aufgaben die angeforderten Änderungen innerhalb des Scopes vollständig umsetzen und normal verifizieren.
 
-Vor Abschluss den finalen Diff prüfen auf:
+Eine fokussierte Aufgabe nicht in einen repositoryweiten Umbau verwandeln.
+
+Vor Abschluss mit `git diff --stat` und/oder `git diff --name-only` Umfang und Dateien erfassen und anschließend die relevanten Änderungen gezielt prüfen auf:
 
 - unnötigen Code, doppelte Logik und unnötige Abstraktionen,
 - unnötige Dependencies und Scope Creep,
 - Architekturverletzungen und Umgehung des Designsystems,
 - Dead Code, Debug-Reste und veraltete Kommentare,
 - fehlende Fehlerbehandlung, Validierung oder Tests,
-- Dokumentationsdrift,
-- Änderungen außerhalb des Auftrags.
+- Dokumentationsdrift und Änderungen außerhalb des Auftrags.
 
 Explizit fragen:
 
 > Könnte diese Implementierung wesentlich einfacher sein und dabei genauso klar, korrekt und wartbar bleiben?
 
 Wenn ja, vor Abschluss vereinfachen. Selbst verursachte Probleme innerhalb des Scopes beheben statt nur erwähnen.
-
-## Scope und Git
-
-Bei Review-, Analyse-, Diagnose- oder Planungsaufgaben untersuchen und berichten, aber das Repository nicht verändern, sofern keine Änderung angefordert wurde.
-
-Bei Implementierungs-, Fix- oder Refactoring-Aufgaben die angeforderten Änderungen innerhalb des Scopes vollständig umsetzen und normale nicht-destruktive Verifikation durchführen.
-
-Eine fokussierte Aufgabe nicht in einen repositoryweiten Umbau verwandeln.
 
 Für Git gilt:
 
@@ -207,22 +188,16 @@ Ein projektspezifischer Git-Workflow geht vor.
 
 ## Definition of Done
 
-Eine Implementierungsaufgabe ist abgeschlossen, wenn:
+Eine Implementierungsaufgabe ist abgeschlossen, wenn das angeforderte Verhalten umgesetzt, relevante Verifikation ausgeführt oder ein konkreter Blocker benannt, der finale Diff geprüft, betroffene dauerhafte Dokumentation aktualisiert und kein selbst verursachter bekannter Fehler offen ist.
 
-- das angeforderte Verhalten umgesetzt ist,
-- relevante Verifikation ausgeführt wurde oder ein konkreter Blocker benannt ist,
-- der finale Diff geprüft wurde,
-- betroffene dauerhafte Dokumentation aktuell ist,
-- keine selbst verursachten bekannten Fehler offen bleiben.
-
-Im Abschlussbericht knapp nennen: Änderungen, ausgeführte Prüfungen, nicht mögliche Prüfungen sowie relevante Annahmen, Risiken oder Restpunkte.
+Im Abschlussbericht knapp nennen: Änderungen, ausgeführte und nicht mögliche Prüfungen sowie relevante Annahmen, Risiken oder Restpunkte.
 
 ## Kontinuierliche Verbesserung
 
 Bei wiederholten Fehlern in dieser Reihenfolge vorgehen:
 
 1. Verhalten durch Code, Typen oder Architektur erzwingen.
-2. Deterministischen Test oder Lint-Regel ergänzen.
+2. Deterministischen Test oder eine Lint-Regel ergänzen.
 3. Projektdokumentation verbessern.
 4. Erst zuletzt eine kurze Regel in die passende `AGENTS.md` aufnehmen.
 
