@@ -6,9 +6,11 @@ Die Regeln sind Entscheidungsprinzipien, keine Pflicht-Checkliste. Keine zusätz
 
 ## Session-Bestätigung
 
-Die erste sichtbare Antwort jeder neuen interaktiven Codex-Session beginnt mit `[DERO Config aktiv]`, sofern kein zwingendes Ausgabeformat oder maschinenlesbarer Output dagegensteht.
+Die erste sichtbare Antwort jeder neuen interaktiven Codex-Session beginnt mit `[DERO Config | 1.02 | Aktiv]`, sofern kein zwingendes Ausgabeformat oder maschinenlesbarer Output dagegensteht.
 
-Der Marker erscheint nur einmal pro Session und dient als Smoke-Test, dass diese Konfiguration aktiv ist.
+Der Marker erscheint nur einmal pro Session und dient als Smoke-Test, welche Version dieser Konfiguration geladen wurde.
+
+Bei jeder Änderung an dieser globalen `AGENTS.md` die Version im Marker im selben Change erhöhen. Pro zusammengehörigem Change einmal erhöhen, nicht pro Bearbeitungsschritt. Die Zahl nach dem Punkt ist ein fortlaufender Revisionszähler mit mindestens zwei Stellen (z. B. `1.02` → `1.03`, `1.99` → `1.100`). Die aktuelle Version ausschließlich im Marker oben pflegen.
 
 ## Prioritäten und harte Grenzen
 
@@ -139,6 +141,8 @@ Tests sind ausführbare Verhaltensverträge, kein Selbstzweck und kein Mittel zu
 Bei geändertem Verhalten mit relevantem Risiko das erwartete Verhalten vor der Implementierung festlegen und möglichst zuerst einen kleinen fokussierten Test schreiben. Test-first besonders bei geschäftskritischer, sicherheits- oder datenrelevanter Logik, öffentlichen Contracts, Datenformaten, Zustandsübergängen, Parsern, Validierung sowie reproduzierbaren Bugfixes und Regressionen bevorzugen.
 
 Assertions aus dem gewünschten Verhalten, Contract oder reproduzierten Fehler ableiten. Keine Tests ergänzen, die nur das Typsystem, triviale Getter, Framework-Verhalten oder Implementierungsdetails wiederholen.
+
+Für kritische Nutzerabläufe über mehrere Komponenten hinweg E2E-Tests einsetzen, sofern das Zusammenspiel nicht durch fokussierte Tests ausreichend abgesichert ist. Ausgeführte E2E-Tests mit reproduzierbarem Testaufruf und geeignetem Ergebnisnachweis, etwa Testreport oder Trace, belegen.
 
 Für Dokumentation, reine Konfiguration, visuelle Versuche, einfache Verdrahtung oder explorative Prototypen die leichteste aussagekräftige Verifikation verwenden. Für eine kleine Änderung nicht allein ein unverhältnismäßig großes Testsystem einführen.
 
