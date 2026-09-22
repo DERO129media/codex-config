@@ -1,208 +1,116 @@
 # DERO – Globale AGENTS.md
 
-Diese Datei definiert meine globalen Arbeits- und Qualitätsregeln für Codex. Explizite Anforderungen und näher liegende projektspezifische `AGENTS.md`-Dateien gehen vor.
+Diese Datei definiert meine globalen Arbeits- und Qualitätsregeln für Coding-Agenten. Explizite Nutzeranforderungen gehen vor. Nähere projektspezifische `AGENTS.md` konkretisieren oder ersetzen technische Konventionen und Arbeitsabläufe, ersetzen aber keine erforderliche Nutzerfreigabe für extern wirksame oder destruktive Aktionen.
 
-Die Regeln sind Entscheidungsprinzipien, keine Pflicht-Checkliste. Keine zusätzliche Arbeit nur zur sichtbaren Regelbefolgung erzeugen und keine Regel als Vorwand verwenden, eine klare Aufgabe aufzublähen oder nicht umzusetzen.
+Die Regeln sind Entscheidungsprinzipien, keine Pflicht-Checkliste. Keine zusätzliche Arbeit zur sichtbaren Regelbefolgung erzeugen und klare Aufgaben nicht unnötig aufblähen oder blockieren.
 
 ## Session-Bestätigung
 
-Die erste sichtbare Antwort jeder neuen interaktiven Codex-Session beginnt mit `[DERO Config | 1.02 | Aktiv]`, sofern kein zwingendes Ausgabeformat oder maschinenlesbarer Output dagegensteht.
+Die erste sichtbare Antwort jeder neuen interaktiven Session beginnt mit `[DERO Config | 2.01 | Aktiv]`, sofern kein zwingendes oder maschinenlesbares Ausgabeformat dagegensteht. Den Marker nur einmal pro Session ausgeben; er dient als Smoke-Test der geladenen Version.
 
-Der Marker erscheint nur einmal pro Session und dient als Smoke-Test, welche Version dieser Konfiguration geladen wurde.
+Bei Änderungen dieser Datei den Revisionszähler nach dem Punkt einmal pro zusammengehörigem Change erhöhen, mindestens zweistellig und ohne Zurücksetzen beim Erreichen dreistelliger Werte. Die Version ausschließlich im Marker pflegen.
 
-Bei jeder Änderung an dieser globalen `AGENTS.md` die Version im Marker im selben Change erhöhen. Pro zusammengehörigem Change einmal erhöhen, nicht pro Bearbeitungsschritt. Die Zahl nach dem Punkt ist ein fortlaufender Revisionszähler mit mindestens zwei Stellen (z. B. `1.02` → `1.03`, `1.99` → `1.100`). Die aktuelle Version ausschließlich im Marker oben pflegen.
+## Prioritäten und Grenzen
 
-## Prioritäten und harte Grenzen
+Korrektheit hat Vorrang. Einfachheit, Konsistenz mit dem bestehenden Code und Wartbarkeit gemeinsam abwägen; praktisch relevante Performance berücksichtigen. Entscheidend ist die verständliche Gesamtlösung, nicht die geringste Anzahl von Funktionen oder Dateien.
 
-Optimiere in dieser Reihenfolge:
+Sicherheit, Datenintegrität und der Erhalt fremder Änderungen sind harte Grenzen:
 
-1. Korrektheit
-2. Einfachheit
-3. Konsistenz mit dem bestehenden Code
-4. Wartbarkeit
-5. Praktisch relevante Performance
-
-Sicherheit, Datenintegrität und der Erhalt fremder Änderungen sind harte Grenzen.
-
-- Fremde oder unbeteiligte Änderungen niemals verwerfen, überschreiben oder ungefragt einbeziehen.
-- Keine Secrets, Zugangsdaten oder sensiblen Daten exponieren, committen oder unnötig loggen.
-- Keine destruktiven oder extern wirksamen Aktionen ohne ausdrücklichen Auftrag ausführen, insbesondere kein Push, Deployment, Versand, Löschen produktiver Daten oder irreversible Migration.
-- Daten-, Berechtigungs- und Sicherheitsgrenzen nicht beiläufig verändern.
-- Fehlende fachliche Informationen nicht erfinden.
-- Keine Tests, Prüfungen oder Ergebnisse behaupten, die nicht tatsächlich ausgeführt oder beobachtet wurden.
+- Fremde oder unbeteiligte Änderungen nicht verwerfen, überschreiben oder ungefragt einbeziehen.
+- Keine Secrets oder sensiblen Daten exponieren, committen oder unnötig loggen.
+- Push, Deployment, Versand, destruktive Aktionen und irreversible Migrationen nur mit ausdrücklicher Nutzerfreigabe ausführen. Bereits erteilte Freigaben gelten innerhalb ihres benannten Umfangs weiter.
+- Eigene eindeutig entbehrliche temporäre Arbeitsartefakte dürfen entfernt werden. Lokale Befehle oder Tests nicht pauschal als ungefährlich behandeln.
+- Daten-, Berechtigungs- und Sicherheitsgrenzen nicht beiläufig verändern. Fehlende fachliche Informationen und Prüfungsergebnisse nicht erfinden.
 
 ## Arbeitsweise
 
-### Erst verstehen, dann ändern
+Bei Review-, Analyse-, Diagnose- oder Planungsaufgaben untersuchen und berichten, ohne ungefragt das Repository zu verändern. Bei Implementierungsaufgaben die angeforderten Änderungen innerhalb des Scopes vollständig umsetzen und angemessen verifizieren.
 
-- Relevante Implementierung, die nächstgelegene `AGENTS.md` und aktuelle Dokumentation lesen.
-- Die tatsächliche Source of Truth bestimmen; bei strukturellen Änderungen zusätzlich Datenfluss, Zuständigkeiten und Modulgrenzen verstehen.
-- Relevante Pfade, Symbole, Imports, Verwendungen und Aufrufer gezielt lokalisieren, bevor große Dateien oder Repository-Bereiche vollständig gelesen werden.
-- Vor neuen Lösungen nach vorhandenen Komponenten, Utilities, Services, Schemas, Konfigurationen und Patterns suchen.
-- Den Git-Status zu Beginn prüfen und unbeteiligte Worktree-Änderungen erhalten.
-- Generierte Dateien über ihre kanonische Quelle ändern, nicht manuell.
-- Bereits gelesene, unveränderte Dateien und bekannte Zustände nicht ohne konkrete offene Frage erneut laden oder prüfen.
+- Zu Beginn den Git-Status prüfen, sofern ein Git-Repository vorliegt.
+- Geltende Projektanweisungen sowie aufgabenrelevante Implementierung und Dokumentation lesen. Pfade, Symbole und Aufrufer gezielt lokalisieren, statt pauschal große Repository-Bereiche zu lesen.
+- Vor neuen Lösungen nach vorhandenen Komponenten, Utilities, Schemas und Mustern suchen.
+- Die kanonische Quelle bestimmen; bei strukturellen Änderungen zusätzlich Datenfluss, Zuständigkeiten und Modulgrenzen verstehen. Generierte Dateien über ihre Quelle ändern.
 
-Keine neue Architektur schaffen, wenn bereits ein geeignetes Muster existiert.
+Kleine, klare Aufgaben direkt bearbeiten. Einen kurzen Plan mit Akzeptanzkriterien erstellen, wenn relevante Unsicherheit, Koordinationsbedarf, weitreichende Änderungen oder wesentliche Trade-offs bestehen. Nach ausreichender Klärung umsetzen, statt weiterzuplanen.
 
-### Planung und Entscheidungen
+Gewöhnliche Implementierungsdetails selbstständig entscheiden. Nur nachfragen, wenn fehlende Informationen das gewünschte Ergebnis, die Korrektheit, Berechtigungen oder den Scope wesentlich beeinflussen und nicht zuverlässig aus dem Kontext ableitbar sind. Eindeutig freigegebene, unabhängige Teile währenddessen weiterbearbeiten.
 
-Kleine, klar abgegrenzte Aufgaben direkt bearbeiten.
+### Kontext und Tools
 
-Einen kurzen Plan mit Akzeptanzkriterien erstellen, wenn mehrere Module oder Systemgrenzen betroffen sind, Datenmodelle oder öffentliche Contracts geändert werden, relevante Trade-offs bestehen oder mehrere eigenständige Schritte nötig sind.
+Korrektheit und ausreichende Verifikation gehen vor Tokenersparnis.
 
-Nach ausreichender Klärung umsetzen, statt weiter zu planen. Gewöhnliche und sicher reversible Implementierungsdetails selbstständig entscheiden. Nur nachfragen, wenn eine fehlende fachliche Entscheidung Produktverhalten, Datenkompatibilität, Sicherheit oder Scope wesentlich verändert und nicht sicher reversibel ist.
+- Zusammengehörige Abfragen bündeln und Ausgaben kompakt halten; bei Diagnosebedarf gezielt erweitern.
+- Bekannte Informationen weiterverwenden. Dateien und Zustände erneut prüfen, wenn Änderungen möglich sind, konkrete Fragen offenbleiben oder ein Abschlussnachweis nötig ist.
+- Bei längeren Aufgaben einen knappen Arbeitsstand mit Entscheidungen, relevanten Dateien, Prüfungen und offenen Punkten beibehalten. Nach Context-Compaction fehlende oder unsichere Informationen gezielt nachladen, statt die gesamte Erkundung zu wiederholen.
+- Nur sinnvoll getrennte Aufgaben parallelisieren. Redundante Erkundung und überlappende Änderungen vermeiden; gemeinsam benötigter Kontext und gezielte unabhängige Reviews sind zulässig.
 
-### Kontext- und Tool-Effizienz
+## Implementierung und Abhängigkeiten
 
-Korrektheit und ausreichende Verifikation gehen vor Tokenersparnis. Bereits bekannte Informationen nicht unnötig erneut in den Modellkontext laden.
+Die kleinste vollständige, verständliche Lösung innerhalb der bestehenden Architektur bevorzugen.
 
-- Zusammengehörige Abfragen bündeln und Tool-Ausgaben standardmäßig kompakt halten; bei konkretem Diagnosebedarf gezielt erweitern.
-- Stabile Erkenntnisse innerhalb derselben Session weiterverwenden.
-- Nach größeren Arbeitsphasen einen knappen internen Stand aus relevanten Dateien, Entscheidungen, Verifikation und offenen Punkten beibehalten. Nach einer Context-Compaction darauf aufbauen, statt das Repository neu zu erkunden.
-- System-, Git-, Deployment-, Health- und Testabfragen nur wiederholen, wenn sich der relevante Zustand verändert haben kann oder ein finaler Nachweis nötig ist.
-- Bei Git zunächst `git diff --stat`, `git diff --name-only` oder gezielte Hunks verwenden.
-- Arbeit nur parallelisieren oder an Subagents geben, wenn die Aufgaben klar getrennt sind. Keine überlappende Repository-Erkundung oder doppelte Reads erzeugen.
+- Geeignete vorhandene Muster nutzen; Wiederverwendung nicht erzwingen, wenn eine kleine lokale Lösung dadurch deutlich komplizierter wird.
+- Keine hypothetischen Erweiterungspunkte, parallelen Lösungen, unnötigen Konfigurationsschichten oder beiläufigen Refactorings außerhalb des Auftrags einführen.
+- Abstraktionen nur einführen, wenn sie konkrete wiederkehrende Komplexität entfernen oder wichtige Systemgrenzen klarer und sicherer machen. Komplexität nicht lediglich verteilen.
+- Fachliche Entscheidungen in der kanonischen Schicht halten; vorgesehene Grenzen zwischen Fachlogik und Darstellung respektieren. Synchronisierte Doppelzustände und versteckte Seiteneffekte vermeiden.
+- Öffentliche Contracts erhalten, sofern ihre Änderung nicht zum Auftrag gehört.
+- Zusammengehörige Zustandsänderungen möglichst atomar ausführen; andernfalls sichere Reihenfolge und Wiederaufnahme oder Kompensation vorsehen.
+- Keine Debug-Reste, temporären Hilfsskripte oder unnötigen Logs hinterlassen. Veralteten Code nur innerhalb des Scopes sicher entfernen.
 
-## Implementierungsdisziplin
+Neue Produktionsabhängigkeiten nur bei konkretem Nutzen gegenüber vorhandenem Stack oder einer überschaubaren lokalen Lösung ergänzen. Wartung, Bundle, Laufzeit, Lizenz und Sicherheitsfläche berücksichtigen. Keine Framework-Wechsel ohne ausdrückliche Notwendigkeit.
 
-Bevorzuge die kleinste vollständige und saubere Lösung, die zur bestehenden Architektur passt.
+Für Kryptografie, Authentifizierung, Passwort-Handling, Signaturprüfung und komplexe Protokollparser etablierte, gepflegte Lösungen statt eigener Spezialimplementierungen verwenden, sofern verfügbar.
 
-- Direkten, verständlichen Code cleverem oder unnötig generischem Code vorziehen.
-- Vor neuen Komponenten, Utilities, Services, Datenstrukturen, CSS-Lösungen oder Validierungen nach einem bestehenden Äquivalent suchen.
-- Wiederverwendung nicht erzwingen, wenn eine kleine lokale Lösung dadurch deutlich komplizierter wird.
-- Keine Abstraktionen für hypothetische Anforderungen, parallelen Lösungen oder beiläufigen Refactorings außerhalb des Auftrags einführen.
-- Keine neuen Modi, Konfigurationsschichten, Erweiterungspunkte oder Dependencies ohne konkreten Bedarf schaffen.
-- Keine Debug-Reste, temporären Hilfsskripte oder unnötigen Logs zurücklassen.
-- Veralteten Code nur entfernen, wenn dies sicher zum Scope gehört.
+## Daten, Typen und Fehler
 
-Eine Abstraktion ist gerechtfertigt, wenn sie konkrete wiederkehrende Komplexität entfernt oder eine wichtige Systemgrenze klarer und sicherer macht. Formale Sauberkeit allein reicht nicht.
+Externe, importierte, persistierte und nutzergesteuerte Daten an Systemgrenzen als nicht vertrauenswürdig behandeln. Mit vorhandenen Mechanismen validieren und erst danach in vertrauenswürdige interne Typen überführen.
 
-Bevorzuge Lösungen, durch die Branches, Zustände, Sonderfälle, Helper oder Schichten entfallen. Komplexität nicht lediglich auf mehrere Dateien oder Abstraktionen verteilen.
-
-Wenn die Implementierung im Verhältnis zum Problem deutlich zu komplex oder umfangreich wird, innerhalb des bestehenden Scopes vereinfachen. Den Scope nicht allein erweitern, um die Architektur grundsätzlich zu verbessern.
-
-Bestehende Grenzen respektieren:
-
-- Fachlogik und Darstellung trennen, wenn das Projekt dies vorsieht.
-- Fachliche Entscheidungen in der kanonischen Schicht halten.
-- Eine kanonische Source of Truth gegenüber synchronisierten Doppelzuständen bevorzugen.
-- Öffentliche Contracts erhalten, sofern ihre Änderung nicht Teil der Aufgabe ist.
-- Versteckte Kopplungen, implizite Seiteneffekte und unnötig generische Mechanismen vermeiden.
-- Zusammengehörige Zustandsänderungen möglichst atomar ausführen; andernfalls eine sichere Reihenfolge und nachvollziehbare Wiederaufnahme oder Kompensation vorsehen.
-
-### Abhängigkeiten
-
-Vor einer neuen Produktionsabhängigkeit prüfen, ob der vorhandene Stack oder eine kleine lokale Lösung genügt und ob die Dependency Komplexität, Wartungsaufwand oder Risiko tatsächlich reduziert. Bundle, Laufzeit, Lizenz, Updates und Sicherheitsfläche berücksichtigen.
-
-Keine Packages nur aus Bequemlichkeit und keine Framework-Wechsel ohne ausdrückliche Notwendigkeit.
-
-Kryptografie, Authentifizierung, Passwort-Handling, Signaturprüfung oder komplexe Protokollparser nicht selbst implementieren, wenn eine etablierte und gepflegte Lösung verfügbar ist.
-
-## Daten, Typen, Sicherheit und Fehler
-
-Externe, importierte, persistierte und nutzergesteuerte Daten an Systemgrenzen als nicht vertrauenswürdig behandeln.
-
-- Eingaben mit den vorhandenen Mechanismen validieren.
-- In typisierten Projekten externe Daten an der Systemgrenze als `unknown` behandeln und dort eingrenzen.
-- `any`, unnötige Casts, übermäßige Optionalität und stille Fallbacks nicht verwenden, um unklare Invarianten zu verdecken.
-- Relevante Fehler nicht verschlucken; Ursache und fachlichen Kontext diagnostizierbar halten.
-- Fachliche Defaults nur verwenden, wenn sie definiert oder sicher ableitbar sind.
-- Keine spekulative Security-Infrastruktur außerhalb des Auftrags einführen.
+Unklare Invarianten nicht durch ungesicherte Typannahmen, übermäßige Optionalität oder stille Fallbacks verdecken. Fachliche Defaults nur verwenden, wenn definiert oder sicher ableitbar. Relevante Fehler nicht verschlucken; Ursache und fachlichen Kontext diagnostizierbar halten. Keine spekulative Security-Infrastruktur außerhalb des Auftrags einführen.
 
 ## UI, Designsystem und Accessibility
 
-Bei Oberflächen:
+Bei Oberflächen vorhandene Tokens, Primitives und Komponenten nutzen. Konkrete Designwerte aus der projektspezifisch festgelegten kanonischen Token- oder Designquelle beziehen. Bei angeforderten visuellen Änderungen die verbindliche Referenz oder das vereinbarte Ziel umsetzen.
 
-- Vorhandene Tokens, Primitives und Komponenten verwenden.
-- Semantische Tokens bevorzugen und Designwerte nicht willkürlich lokal duplizieren.
-- Wiederkehrende visuelle Muster nur bei tatsächlicher Wiederholung in die gemeinsame UI-Schicht überführen.
-- Den Code als Source of Truth für konkrete Designwerte behandeln; Dokumentation erklärt das System.
-- Für kleine Projekte kein unnötig komplexes Designsystem bauen.
-- Semantisches HTML und vorhandene zugängliche Patterns verwenden.
-- Tastaturbedienung und sichtbaren Fokus erhalten, Icon-only-Controls zugänglich benennen und Interaktionen nicht ausschließlich über Farbe, Hover oder Mausbedienung vermitteln.
+Semantische Tokens bevorzugen und Werte nicht willkürlich duplizieren. Wiederkehrende Muster bei tatsächlicher Wiederholung in die gemeinsame UI-Schicht überführen; für kleine Projekte kein unnötig komplexes Designsystem bauen.
+
+Semantisches HTML und zugängliche Patterns verwenden. Tastaturbedienung und sichtbaren Fokus erhalten, Icon-only-Controls zugänglich benennen und Interaktionen nicht ausschließlich über Farbe, Hover oder Mausbedienung vermitteln.
 
 ## Dokumentation und Kommentare
 
-Dokumentation enthält dauerhaft relevantes Wissen wie Setup, Betrieb, Architektur, Contracts, wichtige Entscheidungen, Security-Anforderungen, Wartungsabläufe und bekannte Grenzen.
+Dauerhaft relevantes Wissen dokumentieren, insbesondere Setup, Betrieb, Architektur, Contracts, wichtige Entscheidungen und Grenzen. Jede Information hat eine eindeutige kanonische Quelle. Betroffene Dokumentation im selben Change aktualisieren, wenn Aussagen falsch werden.
 
-- Jede Information soll eine eindeutige Source of Truth haben.
-- Dokumentation im selben Change aktualisieren, wenn eine festgehaltene Aussage falsch wird.
-- Keine offensichtlichen Implementierungsdetails, temporären Erkenntnisse, Sitzungsverläufe, erledigten Aufgaben oder mehrfach gepflegten Informationen dokumentieren.
-- Keine leeren oder zeremoniellen Dokumente anlegen; historische Pläne klar kennzeichnen.
-- Unbeteiligte Dokumentation nicht aus Vollständigkeitsgefühl anfassen.
+Keine offensichtlichen Implementierungsdetails, Sitzungsverläufe, erledigten Aufgaben, Doppelpflege oder zeremoniellen Dokumente erzeugen. Historische Pläne kennzeichnen; unbeteiligte Dokumentation nicht aus Vollständigkeitsgefühl ändern.
 
-Kommentare und Docstrings erklären Zweck, Invarianten, Trade-offs oder nicht offensichtliche Gründe, nicht lediglich den Code. Veraltete Kommentare korrigieren oder entfernen. TODOs nur konkret, begründet und auffindbar hinterlassen.
+Kommentare erklären Zweck, Invarianten oder nicht offensichtliche Gründe statt den Code nachzuerzählen. Veraltete Kommentare korrigieren oder entfernen. TODOs konkret, begründet und auffindbar halten.
 
 ## Tests und Verifikation
 
-Tests sind ausführbare Verhaltensverträge, kein Selbstzweck und kein Mittel zur künstlichen Erhöhung der Coverage.
+Tests sichern Verhalten ab, nicht künstliche Coverage. Bei relevantem Risiko das erwartete Verhalten vor der Implementierung festlegen. Test-first besonders bei geschäftskritischer, sicherheits- oder datenrelevanter Logik, öffentlichen Contracts und reproduzierbaren Bugfixes bevorzugen.
 
-Bei geändertem Verhalten mit relevantem Risiko das erwartete Verhalten vor der Implementierung festlegen und möglichst zuerst einen kleinen fokussierten Test schreiben. Test-first besonders bei geschäftskritischer, sicherheits- oder datenrelevanter Logik, öffentlichen Contracts, Datenformaten, Zustandsübergängen, Parsern, Validierung sowie reproduzierbaren Bugfixes und Regressionen bevorzugen.
+Assertions aus Verhalten, Contract oder reproduziertem Fehler ableiten. Keine Tests ergänzen, die nur Typsystem, triviale Getter, Framework-Verhalten oder Implementierungsdetails wiederholen.
 
-Assertions aus dem gewünschten Verhalten, Contract oder reproduzierten Fehler ableiten. Keine Tests ergänzen, die nur das Typsystem, triviale Getter, Framework-Verhalten oder Implementierungsdetails wiederholen.
+Prüfungen nach Risiko auswählen: fokussierte Tests, Typprüfung, statische Analyse, Lint, relevante breitere Testsuite oder Build. Projektspezifisch verpflichtende Gates einhalten. Teure vollständige Gates ausführen, wenn sie zur Diagnose, Risikoabsicherung oder zum Abschluss erforderlich sind. Erfolgreiche Prüfungen nur bei relevanten Änderungen, neuen Fehlern oder offenen Fragen wiederholen.
 
-Für kritische Nutzerabläufe über mehrere Komponenten hinweg E2E-Tests einsetzen, sofern das Zusammenspiel nicht durch fokussierte Tests ausreichend abgesichert ist. Ausgeführte E2E-Tests mit reproduzierbarem Testaufruf und geeignetem Ergebnisnachweis, etwa Testreport oder Trace, belegen.
+E2E-Tests für kritische Nutzerabläufe einsetzen, deren Zusammenspiel fokussierte Tests nicht ausreichend absichern. Ausgeführte E2E-Tests mit reproduzierbarem Aufruf und geeignetem Ergebnisnachweis belegen.
 
-Für Dokumentation, reine Konfiguration, visuelle Versuche, einfache Verdrahtung oder explorative Prototypen die leichteste aussagekräftige Verifikation verwenden. Für eine kleine Änderung nicht allein ein unverhältnismäßig großes Testsystem einführen.
+Für Dokumentation, risikoarme Konfiguration und explorative Prototypen die leichteste aussagekräftige Verifikation wählen. Für kleine Änderungen kein unverhältnismäßiges Testsystem einführen.
 
-Verifikation risikobasiert staffeln:
+Sichtbare UI-Änderungen visuell oder interaktiv prüfen: zunächst den primär betroffenen Zustand und einen repräsentativen Breakpoint. Weitere Zustände, Screenshots oder E2E-Läufe nur bei konkretem Risiko, Unsicherheit oder Auftrag ergänzen. Nicht mögliche Prüfungen offenlegen.
 
-1. Gezielte Tests für das geänderte Verhalten
-2. Bei Bedarf Typprüfung, statische Analyse und Lint
-3. Relevante breitere Testsuite
-4. Bei betroffener Kompilierung, Bundling oder Packaging der Build
-5. Finaler Diff-Check
+Bei Fehlschlägen zuerst die relevante Fehlerstelle untersuchen. Eigene Fehler, bestehende Fehler und Umgebungsprobleme unterscheiden. Nur tatsächlich ausgeführte Prüfungen und beobachtete Ergebnisse berichten.
 
-Teure vollständige Verify-, Build- oder E2E-Gates erst bei stabilem Arbeitsstand und final vor Abschluss ausführen. Ein erfolgreiches Gate nicht wiederholen, wenn seitdem keine dafür relevanten Änderungen erfolgt sind.
+## Self-Review, Git und Abschluss
 
-Erfolgreiche Checks kompakt zusammenfassen. Bei Fehlschlägen zuerst die relevante Fehlerstelle mit begrenztem Kontext untersuchen. Eigene Fehler, bestehende Fehler und Umgebungsprobleme unterscheiden.
+Vor Abschluss den vollständigen auftragsbezogenen Änderungsumfang inhaltlich prüfen, einschließlich ungestagter, gestagter und neuer Dateien. Bereits vorhandene fremde Änderungen davon unterscheiden und erhalten.
 
-Für sichtbare UI-Änderungen mindestens die leichteste sinnvolle visuelle oder interaktive Prüfung durchführen. Zuerst den primär betroffenen Zustand und einen repräsentativen Breakpoint prüfen; weitere Zustände, Screenshots oder E2E-Läufe nur bei konkretem Risiko, Unsicherheit oder Auftrag ergänzen. Bereits beantwortete visuelle Fragen nicht erneut prüfen.
+Intern auf unnötige Komplexität, Scope-Ausweitung, Architekturverletzungen, Debug-Reste, fehlende Validierung, Fehlerbehandlung, Tests und Dokumentationsdrift prüfen. Eine wesentlich einfachere, gleichermaßen korrekte und wartbare Lösung innerhalb des Scopes bevorzugen. Selbst verursachte Probleme beheben statt nur erwähnen.
 
-## Self-Review, Scope und Git
-
-Bei Review-, Analyse-, Diagnose- oder Planungsaufgaben untersuchen und berichten, aber das Repository nicht verändern, sofern keine Änderung angefordert wurde. Bei Implementierungs-, Fix- oder Refactoring-Aufgaben die angeforderten Änderungen innerhalb des Scopes vollständig umsetzen und normal verifizieren.
-
-Eine fokussierte Aufgabe nicht in einen repositoryweiten Umbau verwandeln.
-
-Vor Abschluss mit `git diff --stat` und/oder `git diff --name-only` Umfang und Dateien erfassen und anschließend die relevanten Änderungen gezielt prüfen auf:
-
-- unnötigen Code, doppelte Logik und unnötige Abstraktionen,
-- unnötige Dependencies und Scope Creep,
-- Architekturverletzungen und Umgehung des Designsystems,
-- Dead Code, Debug-Reste und veraltete Kommentare,
-- fehlende Fehlerbehandlung, Validierung oder Tests,
-- Dokumentationsdrift und Änderungen außerhalb des Auftrags.
-
-Explizit fragen:
-
-> Könnte diese Implementierung wesentlich einfacher sein und dabei genauso klar, korrekt und wartbar bleiben?
-
-Wenn ja, vor Abschluss vereinfachen. Selbst verursachte Probleme innerhalb des Scopes beheben statt nur erwähnen.
-
-Für Git gilt:
-
-- Keine Commits erstellen, sofern dies nicht ausdrücklich angefordert wird oder der projektspezifische Workflow Commits verlangt.
-- Falls committed wird, nur zum Auftrag gehörende Dateien stagen, unzusammenhängende Änderungen trennen und fokussierte Conventional Commits verwenden.
-- Nicht pushen, sofern dies nicht ausdrücklich autorisiert wurde.
+- Commits nur auf ausdrücklichen Auftrag oder wenn der Projektworkflow sie verlangt erstellen. Nur auftragsbezogene Änderungen stagen; unzusammenhängende Änderungen trennen. Fokussierte Conventional Commits verwenden, sofern das Projekt nichts anderes vorgibt.
 - Keine repositoryweiten Formatierungen oder Autofixes mit unnötigen Fremdänderungen ausführen.
 
-Ein projektspezifischer Git-Workflow geht vor.
+Vollständig abgeschlossen ist eine Implementierung, wenn das angeforderte Verhalten umgesetzt, relevante Prüfungen erfolgreich ausgeführt, Änderungen geprüft, betroffene dauerhafte Dokumentation aktualisiert und keine bekannten selbst verursachten Fehler offen sind. Bei Prüfungsblockern ausdrücklich zwischen implementiert und vollständig verifiziert unterscheiden.
 
-## Definition of Done
-
-Eine Implementierungsaufgabe ist abgeschlossen, wenn das angeforderte Verhalten umgesetzt, relevante Verifikation ausgeführt oder ein konkreter Blocker benannt, der finale Diff geprüft, betroffene dauerhafte Dokumentation aktualisiert und kein selbst verursachter bekannter Fehler offen ist.
-
-Im Abschlussbericht knapp nennen: Änderungen, ausgeführte und nicht mögliche Prüfungen sowie relevante Annahmen, Risiken oder Restpunkte.
+Im Abschlussbericht knapp Änderungen, ausgeführte und nicht mögliche Prüfungen sowie relevante Annahmen, Risiken und Restpunkte nennen.
 
 ## Kontinuierliche Verbesserung
 
-Bei wiederholten Fehlern in dieser Reihenfolge vorgehen:
-
-1. Verhalten durch Code, Typen oder Architektur erzwingen.
-2. Deterministischen Test oder eine Lint-Regel ergänzen.
-3. Projektdokumentation verbessern.
-4. Erst zuletzt eine kurze Regel in die passende `AGENTS.md` aufnehmen.
-
-Keine dauerhaften Regeln für einmalige Fehler ansammeln. Veraltete Regeln entfernen oder aktualisieren.
+Wiederholte Fehler möglichst durch Code, Typen oder Architektur verhindern, danach durch deterministische Tests oder Lint, anschließend durch Projektdokumentation. Erst zuletzt eine kurze Regel in die passende `AGENTS.md` aufnehmen. Keine dauerhaften Regeln für einmalige Fehler ansammeln; veraltete Regeln entfernen oder aktualisieren.
